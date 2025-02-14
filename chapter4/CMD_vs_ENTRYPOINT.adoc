@@ -1,0 +1,72 @@
+# Differenza tra CMD ed ENTRYPOINT
+
+## CMD
+
+[source,dockerfile]
+----
+FROM busybox
+CMD ["echo", "Hello, Red Hat!"] # usato se non ci sono argomenti
+----  
+
+CMD verrà utilizzato solo se non sono forniti argomenti all'avvio. Esempio:  
+
+[source,shell]
+----
+$ podman build . -t myimage
+$ podman run myimage
+
+Hello, Red Hat!
+
+$ podman run myimage ls
+bin
+dev
+etc  
+----
+
+## ENTRYPOINT
+  
+ENTRYPOINT verrà utilizzato in ogni caso all'avvio dell'immagine:
+
+
+[source,dockerfile]
+----
+FROM busybox
+ENTRYPOINT ["echo", "Hello,"]
+----
+
+Esempio:
+
+----
+$ podman run myimage
+Hello,
+
+$ podman run myimage redhat
+Hello, redhat
+----
+
+## Uso combinato di CMD ed ENTRYPOINT
+
+[source,dockerfile]
+----
+FROM busybox
+ENTRYPOINT ["echo"]
+CMD ["Hello from BusyBox!"]
+----
+
+Caso 1: Senza argomenti
+
+----
+$ podman run mybusybox
+
+Hello from BusyBox!
+----
+
+Caso 2: con argomenti
+
+----
+$ docker run mybusybox "Custom message"
+
+Custom message
+----
+  
+  
