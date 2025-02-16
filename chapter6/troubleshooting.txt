@@ -45,3 +45,8 @@ Mostra come entrare nel namespace di rete per fare una inspect
 [workstation] sudo nsenter -n -t 3272 ss -pant
 State             Recv-Q             Send-Q                              Local Address:Port                                Peer Address:Port             Process                                                              
 ESTAB             0                  0                              [::ffff:127.0.0.1]:8001     <-----                     [::ffff:127.0.0.1]:36576             users:(("nc",pid=3548,fd=3))      
+
+Testiamo gli eventi
+[wrokstation] podman events
+
+* esci dai container e verifica eventi
