@@ -1,0 +1,41 @@
+# podman compose up -d
+# Avvia adminer da workstation: localhost:8080
+
+# System: Postgresql
+# Server: db
+
+version: '3.7'
+
+services:
+  db:
+    image: docker.io/library/postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  adminer:
+    image: docker.io/library/adminer:latest
+    container_name: postgres-adminer
+    ports:
+      - "5432:5432"
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
+
+# bridge crea una rete isolata e virtuale, utile per collegare container tra loro senza esporli direttamente all'esterno. E' il default
+
