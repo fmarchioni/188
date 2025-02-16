@@ -37,5 +37,15 @@ networks:
   app-network:
     driver: bridge
 
+
+
+# db-data: named volume. Quando avvii il container, il volume db-data viene montato sulla directory /var/lib/postgresql/data all'interno del container.
+# sono più portatili dei bind mounts
+
 # bridge crea una rete isolata e virtuale, utile per collegare container tra loro senza esporli direttamente all'esterno. E' il default
 
+#podman network ls
+#NETWORK ID    NAME                 DRIVER
+#38059826efe9  student_app-network  bridge
+
+#podman compose down
