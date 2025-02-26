@@ -1,52 +1,17 @@
-apri 3 terminali su workstation
+# Da workstation
+podman network create podnet
 
-[workstation] podman network create podnet
+podman run -it --rm --name busy1 --network podnet  busybox /bin/sh
 
-[workstation] podman run -it --rm --name busy1 --network podnet  busybox /bin/sh
-[workstation] podman run -it --rm --name busy2 --network podnet  busybox /bin/sh
+# Nel container
+ss
 
-[workstation] podman ps
-
-[workstation] podman inspect busy1 | grep IP
-[workstation] podman inspect busy2 | grep IP
-
-dentro il secondo container mettiti in ascolto
-
-[busy2] nc -l -p 8001
-
-dentro il primo invia un messaggio (compare dopo l'invio)
-
-[busy1] nc 10.89.0.3 8001
-
-[busy1] exit
-[busy2] exit
-
-* Questa configurazione usa una interfaccia in bridge:
-
-[workstation] podman network inspect podnet
-
-A differenza di docker, l'interfaccia di bridge non è raggiungibile dall'host, quindi va cambiata in host o in NAT
-
-Ad esempio:
-
-[workstation] podman run -it --rm --name busy2 --network host busybox /bin/sh
-[busy2] / # nc -l -p 8001
+nc -l -p 8001
 
 
-[workstation] nc locahost 8001
+# Da workstation
 
-Tieni le connessioni attive nelle due shell
-Mostra come entrare nel namespace di rete per fare una inspect
+PID=$(podman inspect -f '{{.State.Pid}}' busy1)
+echo $PID
+sudo nsenter -n -t $PID ss -pant
 
-
-[workstation] podman inspect -f '{{.State.Pid}}' busy2
-3272
-
-[workstation] sudo nsenter -n -t 3272 ss -pant
-State             Recv-Q             Send-Q                              Local Address:Port                                Peer Address:Port             Process                                                              
-ESTAB             0                  0                              [::ffff:127.0.0.1]:8001     <-----                     [::ffff:127.0.0.1]:36576             users:(("nc",pid=3548,fd=3))      
-
-Testiamo gli eventi
-[wrokstation] podman events
-
-* esci dai container e verifica eventi
