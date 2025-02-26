@@ -1,3 +1,26 @@
+# Come posso proseguire nella build di Podman in caso di errori ?
+
+In caso di errori (es. files mancanti) la build di un'immagine si interrompe.
+Esiste un workaround che consiste nel mettere una istruzione in OR in aggiunta al comando che fallisce.
+Esempio:
+
+```Containerfile
+FROM        registry.redhat.io/ubi8/ubi:8.6  
+LABEL       description="This is a custom httpd container image"  
+RUN         yum install -y httpd  
+EXPOSE      80  
+ENV         LogLevel "info"  
+ADD         http://someserver.com/filename.pdf /var/www/html  || true
+COPY        ./src/   /var/www/html/  
+USER        apache  
+ENTRYPOINT  ["/usr/sbin/httpd"] 
+CMD         ["-D", "FOREGROUND"]
+```
+
+In questo caso, anche se l'istruzione ADD fallisce nel recupero del filename.pdf, la build continua poichè l'istruzione
+è in OR con il booleano true
+
+
 # Quali sono i files di configurazione della Network di Podman ?
 
 Podman supporta due diversi backend per la gestione della rete dei container:
