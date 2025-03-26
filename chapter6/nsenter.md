@@ -79,3 +79,9 @@ sudo nsenter -n -t $PID ss -pant
 
 By using `nsenter`, you can troubleshoot a container's network namespace directly from the workstation. This is useful for debugging connectivity issues, verifying open ports, and inspecting active network connections inside a containerized environment.
 
+Note: Container Processes are visible in the Host's process table. The command podman inspect simply helps us to trace and nsenter to execute commands in it. For example, Host's view of ncat in a Container:
+
+```
+frances+  225159  225156  0 08:17 pts/0    00:00:00 /bin/sh
+frances+  225166  225159  0 08:17 pts/0    00:00:00 nc -l 8001
+```
