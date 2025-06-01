@@ -1,0 +1,19 @@
+FROM alpine:latest
+
+# Install essentials: bash, ncurses-utils (tput), coreutils (sleep, echo)
+RUN apk add --no-cache bash ncurses coreutils
+
+
+# Copia lo script matrix.sh (supponiamo che tu l’abbia pronto accanto)
+COPY matrix.sh /usr/local/bin/matrix.sh
+
+# Rendi eseguibile lo script
+RUN chmod +x /usr/local/bin/matrix.sh
+
+RUN echo 'export PS1="Matrix-DO188 \$ "' >> /root/.bashrc  
+ 
+RUN echo "Benvenuto su Matrix-DO188!" > /etc/motd
+
+
+# Avvia lo script come CMD per vedere subito l’effetto matrix rain
+CMD ["/usr/local/bin/matrix.sh"]
