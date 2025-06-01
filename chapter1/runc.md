@@ -106,5 +106,4 @@ sudo runc run $CONTAINER_NAME
 Ti ritroverai in una shell isolata, dentro un container basato su Alpine Linux.
 
 ---
-
-*Documentazione creata per uso didattico.*
+ 
