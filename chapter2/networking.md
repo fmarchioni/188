@@ -65,12 +65,15 @@ sudo podman run --rm --name client1 registry.access.redhat.com/ubi8/httpd-24:lat
 
 ### Step 3: Get the container IP
 ```bash
-sudo podman inspect web1 | grep IPAddress
+IP=$(sudo podman inspect web1 -f '{{.NetworkSettings.Networks.podman.IPAddress}}')
 ```
 
 ### Step 4: Access using the IP address
 ```bash
-sudo podman run --rm --name client1 registry.access.redhat.com/ubi8/httpd-24:latest curl http://10.88.0.3:8080
+sudo podman run --rm --name client1 registry.access.redhat.com/ubi8/httpd-24:latest curl $IP:8080
+
+# Chiaramente anche l'accesso dall' Hostfunziona
+curl $IP:8080
 ```
 ✅ This works! Rootful containers in `bridge` network can be accessed via their IP address.
 
