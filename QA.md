@@ -1,4 +1,17 @@
-# Come posso proseguire nella build di Podman in caso di errori ?
+## È obbligatorio partire da un sistema operativo nel Dockerfile?
+
+✅ Risposta:
+No. Si può partire da FROM scratch, che è un’immagine vuota.
+In quel caso sei tu a costruire il filesystem da zero, ad esempio copiando solo un binario statico.
+Questo è utile per creare container minimali e sicuri, ma devi sapere cosa stai facendo: non avrai né /bin/sh né ls.
+
+```Containerfile
+FROM scratch
+COPY myapp /myapp
+ENTRYPOINT ["/myapp"]
+```
+
+## Come posso proseguire nella build di Podman in caso di errori ?
 
 In caso di errori (es. files mancanti) la build di un'immagine si interrompe.
 Esiste un workaround che consiste nel mettere una istruzione in OR in aggiunta al comando che fallisce.
@@ -21,7 +34,7 @@ In questo caso, anche se l'istruzione ADD fallisce nel recupero del filename.pdf
 è in OR con il booleano true
 
 
-# Quali sono i files di configurazione della Network di Podman ?
+## Quali sono i files di configurazione della Network di Podman ?
 
 Podman supporta due diversi backend per la gestione della rete dei container:
 
@@ -155,9 +168,26 @@ E poi eseguire un container su questa rete:
 podman run --rm -dt --network custom-net --name test-container nginx
 ```
 
-## Riassunto:
+### Riassunto:
 
 - **Se usi CNI**, modifica i file in `/etc/cni/net.d/` o `~/.config/cni/net.d/`.
 - **Se usi Netavark**, configura le reti in `/etc/containers/networks/` o `~/.config/containers/networks/`.
 - **Puoi anche creare le reti con il comando `podman network create` senza modificare i file manualmente.**
 
+##  Come migrare da Docker Desktop a Podman Desktop mantenendo la compatibilità?
+
+- Usare podman-docker per alias dei comandi Docker
+
+- Importare Docker Compose tramite estensioni
+
+- Configurare il Docker API socket per tool esterni
+
+- Limitazioni: Alcune funzionalità GUI avanzate (es. Kubernetes integrato) non sono disponibili
+
+## Come gesisce il ciclo di vita dei container Podman in assenza di un daemon?
+
+Podman non utilizza un daemon come Docker. Invece di affidarsi a un processo centrale in background (come dockerd in Docker), Podman adotta un'architettura senza daemon: ogni comando eseguito avvia direttamente il container come processo figlio dell'utente, senza necessità di un servizio persistente.
+
+Come gestisce Podman il ciclo di vita dei container?
+
+Senza un daemon, Podman si integra strettamente con systemd per la gestione del ciclo di vita dei container. Può generare file di unità systemd per i container esistenti utilizzando il comando podman generate systemd. Questi file permettono a systemd di gestire i container come servizi di sistema, consentendo operazioni come avvio automatico al boot, riavvio in caso di fallimento e gestione delle dipendenze tra serviz
