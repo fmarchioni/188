@@ -12,6 +12,10 @@ podman run --rm --name web1 -p 8080:8080 registry.access.redhat.com/ubi8/httpd-2
 ```
 This launches `web1` in rootless mode using the default `pasta` network.
 
+```bash
+podman inspect web1 | grep -i networkmode
+```
+
 ### Step 2: Try accessing it from another container
 ```bash
 podman run --rm --name client1 registry.access.redhat.com/ubi8/nginx-120 curl http://web1:8080
