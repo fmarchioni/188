@@ -77,6 +77,18 @@ curl $IP:8080
 ```
 ✅ This works! Rootful containers in `bridge` network can be accessed via their IP address.
 
+### Step 5: Connect to existing network (Rootful)
+
+In rootful mode, you can connect to an existing network and switch to "bridge mode" (DNS and IP works)
+
+```bash
+
+sudo podman network create my-net
+
+sudo podman run --rm --name web1 -p 8080:8080 registry.access.redhat.com/ubi8/httpd-24:latestt
+
+sudo podman network connect web1 my-net
+```
 ---
 
 ## ✅ Summary
