@@ -35,11 +35,12 @@ graph TD
   subgraph Network_cities
     Cities[cities app - Golang]
     Times[times app - Golang]
-    Cities -->|internal request| Times
+    Cities -->|request on port 8080| Times
   end
 
-  Client[Client or User] --> Cities
+  Client[Client or User] -->|request on port 8090| Cities
   Client --> Times
+
 ```
 
 ---
