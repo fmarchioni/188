@@ -90,62 +90,16 @@ Output:
 
 ---
 
-## 5️⃣ Verifica identità nel container
+## 5️⃣ Come faccio se non ho permessi su questo file system?
+
+Devi usare i comandi classici come chown,chgrp ma in combinazione con podman unshare perchè devi cambiare l'ownership dalla vista del container.
+
+Es:
 
 ```bash
-id
+$ podman unshare chgrp -R 994 /var/www/html
 ```
-
-```text
-uid=0(root) gid=0(root)
-```
-
-Spieghi:
-
-> “Sono root nel container,
-> ma questo root **non è root sull’host**.”
-
----
-
-## 6️⃣ Test pratico (accesso al file)
-
-```bash
-cat /var/www/html/index.html
-```
-
-✔️ Funziona (permesso di lettura)
-
-```bash
-echo "test" >> /var/www/html/index.html
-```
-
-❌ **Permission denied**
-
-Spiegazione:
-
-> “Il file è root:root *nel namespace*,
-> ma non scrivibile da root-container → perché non è root host.”
-
----
-
-## 7️⃣ Esci dal container
-
-```bash
-exit
-```
-
----
-
-# 🔁 Verifica finale sull’host
-
-```bash
-ls -l /tmp/www-demo/index.html
-```
-
-Contenuto **invariato**.
-
----
-
+ 
 # 🧠 Messaggio chiave  
 
 > “`podman unshare` è la preview esatta
