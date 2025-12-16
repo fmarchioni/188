@@ -1,6 +1,6 @@
 # Troubleshooting a Container Using `nsenter`
 
-When dealing with networking issues in a container, we can use `nsenter` to inspect the container's network namespace. This guide walks through the process using `podman` and `busybox`.
+How to execute a command available in the Host machine (ss) on the namespace of the container.
 
 ## 1. Create a Custom Network
 
@@ -26,6 +26,7 @@ podman run -it --rm --name busy1 --network podnet busybox /bin/sh
 - `--network podnet`: Connects the container to the custom network `podnet`.
 - `busybox /bin/sh`: Starts the container with a shell.
 
+
 ## 3. Check Active Connections in the Container
 
 Inside the container, run:
@@ -34,11 +35,12 @@ Inside the container, run:
 ss
 ```
 
-This command shows active network sockets inside the container.
+As you can see, this command is not available in busybox!!
+How to execute it with nsenter ???
 
-## 4. Start a Listener Inside the Container
+## 3. Start a Listener Inside the Container
 
-Run a simple netcat (nc) listener on port `8001`:
+First, let's start a simple netcat (nc) listener on port `8001`:
 
 ```sh
 nc -l -p 8001
